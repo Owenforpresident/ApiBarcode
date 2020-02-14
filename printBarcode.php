@@ -2,7 +2,6 @@
 $EAN13 = $_GET['ean13'];
 $qty = $_GET['qty'];
 ?> 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,12 +9,10 @@ $qty = $_GET['qty'];
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/slate/bootstrap.min.css" rel="stylesheet" integrity="sha384-G9YbB4o4U6WS4wCthMOpAeweY4gQJyyx0P3nZbEBHyz+AtNoeasfRChmek1C2iqV" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" media="print" href="css/print.css" />
-
+    <link rel="stylesheet" type="text/css" media="print"  />
 <script type='text/javascript'>
-
 function onDrawImageFile() {
-    console.log('draw ran...')
+    //console.log('draw ran...')
     var canvas = document.getElementById('canvasPaper');
 
     if (canvas.getContext) {
@@ -60,34 +57,29 @@ function onDrawImageFile() {
 }
 
 function printBarcodes() {               
-    var qty = <?=$_GET['qty'] ?>
+    var qty = <?=$_GET['qty'] ?>;
     var i = 0;
         while (i < qty) {
         onSendMessage();
         i++;
         }
 }
-
 window.onload = function(){ //onLoad is wrong, change to the onregister or whatever that one is called
     onDrawImageFile();
     printBarcodes();
 }
 
-
 function onSendMessage() {
     var url              = document.getElementById('url').value;
     var papertype        = document.getElementById('papertype').value;
-
+    console.log('print running..')
     var trader = new StarWebPrintTrader({url:url, papertype:papertype});
 
     trader.onReceive = function (response) {
-        hideNowPrinting();
 
         var msg = '- onReceive -\n\n';
 
         msg += 'TraderSuccess : [ ' + response.traderSuccess + ' ]\n';
-
-//      msg += 'TraderCode : [ ' + response.traderCode + ' ]\n';
 
         msg += 'TraderStatus : [ ' + response.traderStatus + ',\n';
 
@@ -104,19 +96,11 @@ function onSendMessage() {
 
         msg += '\tEtbCounter = ' + trader.extractionEtbCounter({traderStatus:response.traderStatus}).toString() + ' ]\n';
 
-//      msg += 'Status : [ ' + response.status + ' ]\n';
-//
-//      msg += 'ResponseText : [ ' + response.responseText + ' ]\n';
-
         alert(msg);
     }
 
     trader.onError = function (response) {
-        var msg = '- onError -\n\n';
-
-        msg += '\tStatus:' + response.status + '\n';
-
-        msg += '\tResponseText:' + response.responseText + '\n\n';
+        var msg = 'Error \n\n';
 
         msg += 'Do you want to retry?\n';
 
@@ -126,7 +110,7 @@ function onSendMessage() {
             onSendMessage();
         }
         else {
-            hideNowPrinting();
+            console.log('this is what is being hit..')
         }
     }
 
@@ -150,14 +134,11 @@ function onSendMessage() {
         }
     }
     catch (e) {
-        hideNowPrinting();
-
         alert(e.message);
     }
 }
 
 </script>
-
 </head>
 <body>
 <div class="jumbotron" id="page">
@@ -242,7 +223,6 @@ function onSendMessage() {
 <script type='text/javascript' src='js/StarWebPrintBuilder.js'></script>
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
 
-<script src="js/etiquette.js"></script>
 </body>
 </html>
 
