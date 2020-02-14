@@ -10,9 +10,15 @@ $qty = $_GET['qty'];
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" media="print"  />
+
 <script type='text/javascript'>
+
+window.onload = function(){  
+    onDrawImageFile();
+    printBarcodes();
+}
+
 function onDrawImageFile() {
-    //console.log('draw ran...')
     var canvas = document.getElementById('canvasPaper');
 
     if (canvas.getContext) {
@@ -42,11 +48,10 @@ function onDrawImageFile() {
             var destWidth  = image.width  * stretch / 100;
             var destHeight = image.height * stretch / 100;
 
-//          context.drawImage(image, 0, 0,                      x, y);
             context.drawImage(image, 0, 0, srcWidth, srcHeight, x, y, destWidth, destHeight);
 
             document.getElementById('positionY').value = y + destHeight + 16;
-//          document.getElementById('positionY').value = y + destHeight;
+
         }
 
         image.onerror = function () {
@@ -64,25 +69,19 @@ function printBarcodes() {
         i++;
         }
 }
-window.onload = function(){ //onLoad is wrong, change to the onregister or whatever that one is called
-    onDrawImageFile();
-    printBarcodes();
-}
+
 
 function onSendMessage() {
     var url              = document.getElementById('url').value;
     var papertype        = document.getElementById('papertype').value;
-    console.log('print running..')
+    
+    
     var trader = new StarWebPrintTrader({url:url, papertype:papertype});
 
     trader.onReceive = function (response) {
-
         var msg = '- onReceive -\n\n';
-
         msg += 'TraderSuccess : [ ' + response.traderSuccess + ' ]\n';
-
         msg += 'TraderStatus : [ ' + response.traderStatus + ',\n';
-
         if (trader.isCoverOpen            ({traderStatus:response.traderStatus})) {msg += '\tCoverOpen,\n';}
         if (trader.isOffLine              ({traderStatus:response.traderStatus})) {msg += '\tOffLine,\n';}
         if (trader.isCompulsionSwitchClose({traderStatus:response.traderStatus})) {msg += '\tCompulsionSwitchClose,\n';}
@@ -93,50 +92,45 @@ function onSendMessage() {
         if (trader.isBlackMarkError       ({traderStatus:response.traderStatus})) {msg += '\tBlackMarkError,\n';}
         if (trader.isPaperEnd             ({traderStatus:response.traderStatus})) {msg += '\tPaperEnd,\n';}
         if (trader.isPaperNearEnd         ({traderStatus:response.traderStatus})) {msg += '\tPaperNearEnd,\n';}
-
         msg += '\tEtbCounter = ' + trader.extractionEtbCounter({traderStatus:response.traderStatus}).toString() + ' ]\n';
-
-        alert(msg);
+        //alert(msg);
     }
-
     trader.onError = function (response) {
-        var msg = 'Error \n\n';
-
+        var msg = 'There was an error printing \n';
         msg += 'Do you want to retry?\n';
-
         var answer = confirm(msg);
-
-        if (answer) {
-            onSendMessage();
-        }
-        else {
-            console.log('this is what is being hit..')
-        }
+            if (answer) {
+                console.log('print function called again..')
+                onSendMessage();
+            }
+                else {
+                    console.log('print cancelled..')
+                }
     }
+            try {
+                var canvas = document.getElementById('canvasPaper');
 
-    try {
-        var canvas = document.getElementById('canvasPaper');
+                if (canvas.getContext) {
+                    var context = canvas.getContext('2d');
 
-        if (canvas.getContext) {
-            var context = canvas.getContext('2d');
+                    var builder = new StarWebPrintBuilder();
 
-            var builder = new StarWebPrintBuilder();
+                    var request = '';
 
-            var request = '';
+                    request += builder.createInitializationElement();
 
-            request += builder.createInitializationElement();
+                    request += builder.createBitImageElement({context:context, x:0, y:0, width:canvas.width, height:canvas.height});
 
-            request += builder.createBitImageElement({context:context, x:0, y:0, width:canvas.width, height:canvas.height});
+                    request += builder.createCutPaperElement({feed:true});
 
-            request += builder.createCutPaperElement({feed:true});
-
-            trader.sendMessage({request:request});
-        }
-    }
-    catch (e) {
-        alert(e.message);
-    }
+                    trader.sendMessage({request:request});
+                }
+            }
+                catch (e) {
+                    alert(e.message);
+                }
 }
+
 
 </script>
 </head>
@@ -183,7 +177,7 @@ function onSendMessage() {
 				</dl>			
 			
                 <div class="input-group">
-                    <input type="number" id='printQuantity'class="form-control" aria-label="Amount (to the nearest dollar)">
+                    <input type="number" id='printQuantity'class="form-control" value=<?=$qty?> aria-label="Amount (to the nearest dollar)">
                     <div class="input-group-append">
                     <span class="input-group-text">Quantity</span>
                 </div>      
@@ -219,7 +213,6 @@ function onSendMessage() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-
 <script type='text/javascript' src='js/StarWebPrintBuilder.js'></script>
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
 
