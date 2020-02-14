@@ -8,17 +8,18 @@ $qty = $_GET['qty'];
     <meta charset="utf-8" />
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/slate/bootstrap.min.css" rel="stylesheet" integrity="sha384-G9YbB4o4U6WS4wCthMOpAeweY4gQJyyx0P3nZbEBHyz+AtNoeasfRChmek1C2iqV" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" media="print"  />
-
+    
+   <!-- <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">    -->
 <script type='text/javascript'>
 
-window.onload = function(){  
+
     onDrawImageFile();
     printBarcodes();
-}
+
+
 
 function onDrawImageFile() {
+    console.log('draw ran...')
     var canvas = document.getElementById('canvasPaper');
 
     if (canvas.getContext) {
@@ -26,7 +27,7 @@ function onDrawImageFile() {
             url: "getBarCode.php",
             type: 'GET',
             data: {
-                ean13: <?= $_GET['ean13'] ?>
+                ean13: "<?php echo $EAN13?>"
             }
         }).done(function (result) {
             console.log(result)
@@ -139,7 +140,7 @@ function onSendMessage() {
     <div class="row justify-content-md-center">
         <div class="card" style="width: 25rem; text-align: center " id="contenu">
             <div class="card-header">
-                <?= $_GET['ref'] ?>
+                
             </div>
             <form onsubmit='return false;' id="form">
 		<header>
@@ -151,6 +152,7 @@ function onSendMessage() {
 				<div id="canvasBlock">
 					<div id='canvasFrame'>
 						<canvas id='canvasPaper' height="230"> 
+                            
 						</canvas>
 					</div>
 				</div>
