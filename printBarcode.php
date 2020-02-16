@@ -8,15 +8,7 @@ $qty = $_GET['qty'];
     <meta charset="utf-8" />
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/slate/bootstrap.min.css" rel="stylesheet" integrity="sha384-G9YbB4o4U6WS4wCthMOpAeweY4gQJyyx0P3nZbEBHyz+AtNoeasfRChmek1C2iqV" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
-    
-   <!-- <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">    -->
 <script type='text/javascript'>
-
-
-    onDrawImageFile();
-    printBarcodes();
-
-
 
 function onDrawImageFile() {
     console.log('draw ran...')
@@ -52,7 +44,6 @@ function onDrawImageFile() {
             context.drawImage(image, 0, 0, srcWidth, srcHeight, x, y, destWidth, destHeight);
 
             document.getElementById('positionY').value = y + destHeight + 16;
-
         }
 
         image.onerror = function () {
@@ -217,7 +208,10 @@ function onSendMessage() {
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script type='text/javascript' src='js/StarWebPrintBuilder.js'></script>
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
-
+<script> 
+onDrawImageFile(); 
+printBarcodes();
+</script> 
 </body>
 </html>
 
