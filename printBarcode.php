@@ -209,8 +209,10 @@ function onSendMessage() {
 <script type='text/javascript' src='js/StarWebPrintBuilder.js'></script>
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
 <script> 
+$( document ).ready(function() {
 onDrawImageFile(); 
 printBarcodes();
+});
 </script> 
 </body>
 </html>
