@@ -1,6 +1,7 @@
 <?php
 $EAN13 = $_GET['ean13'];
 $qty = $_GET['qty'];
+$ref = $_GET['ref'];
 ?> 
 <!DOCTYPE html>
 <html>
@@ -8,6 +9,8 @@ $qty = $_GET['qty'];
     <meta charset="utf-8" />
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/slate/bootstrap.min.css" rel="stylesheet" integrity="sha384-G9YbB4o4U6WS4wCthMOpAeweY4gQJyyx0P3nZbEBHyz+AtNoeasfRChmek1C2iqV" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
+    
+
 <script type='text/javascript'>
 
 function onDrawImageFile() {
@@ -16,7 +19,7 @@ function onDrawImageFile() {
 
     if (canvas.getContext) {
         $.ajax({
-            url: "getBarCode.php",
+            url: "getBarcode.php",
             type: 'GET',
             data: {
                 ean13: "<?php echo $EAN13?>"
@@ -142,8 +145,8 @@ function onSendMessage() {
 			<div class="wrapper">
 				<div id="canvasBlock">
 					<div id='canvasFrame'>
-						<canvas id='canvasPaper' height="230"> 
-                            
+						<canvas id='canvasPaper' height="125"> 
+                            <div> <?php echo $ref?> 123456 </div>
 						</canvas>
 					</div>
 				</div>
@@ -209,11 +212,13 @@ function onSendMessage() {
 <script type='text/javascript' src='js/StarWebPrintBuilder.js'></script>
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
 <script> 
-$( document ).ready(function() {
-onDrawImageFile(); 
-printBarcodes();
-});
-</script> 
+        $( document ).ready(function() {
+        onDrawImageFile(); 
+        setTimeout(function() {
+        printBarcodes(); 
+        }, 1000);
+        });
+    </script> 
 </body>
 </html>
 
