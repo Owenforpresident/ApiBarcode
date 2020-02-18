@@ -256,22 +256,12 @@ function onSendMessage() {
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
 <script> 
         $( document ).ready(function() {          
-    function Order() {               
-        var qty = <?=$_GET['qty'] ?>;
-        var i = 0;
-        while (i < qty) {
-
+    function Order() {                     
         onDrawBarcodeFile(); 
-        setTimeout(function() {
-        printFiles(); 
-        }, 1000);
-
         onDrawTextFile(); 
         setTimeout(function() {
         printFiles(); 
-        }, 1000);
-        i++;
-        }
+        }, 2000);      
 }
 Order(); 
         });
