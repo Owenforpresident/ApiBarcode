@@ -57,7 +57,7 @@ function onDrawBarcodeFile() {
 }
 
 function onDrawTextFile() {
-    console.log('draw ran...')
+    console.log('draw text ran...')
     var canvas = document.getElementById('canvasPaper');
 
     if (canvas.getContext) {
@@ -256,7 +256,7 @@ function onSendMessage() {
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
 <script> 
         $( document ).ready(function() {          
-    function Order() {                     
+    function Order() { 
         onDrawBarcodeFile(); 
         onDrawTextFile(); 
         setTimeout(function() {

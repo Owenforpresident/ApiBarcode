@@ -1,6 +1,6 @@
 <?php 
 $ref = $_GET['ref'];
-$ch = curl_init("http://api.img4me.com/?text=".$ref."&font=arial&fcolor=000000&size=10&bcolor=FFFFFF&type=png");
+$ch = curl_init("http://api.img4me.com/?text=".$ref."&font=Impact&fcolor=000000&size=30&bcolor=FFFFFF&type=png");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
