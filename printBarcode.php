@@ -13,7 +13,7 @@ $ref = $_GET['ref'];
 
 <script type='text/javascript'>
 
-function onDrawImageFile() {
+function onDrawBarcodeFile() {
     console.log('draw ran...')
     var canvas = document.getElementById('canvasPaper');
 
@@ -56,7 +56,50 @@ function onDrawImageFile() {
  }
 }
 
-function printBarcodes() {               
+function onDrawTextFile() {
+    console.log('draw ran...')
+    var canvas = document.getElementById('canvasPaper');
+
+    if (canvas.getContext) {
+        $.ajax({
+            url: "getRef.php",
+            type: 'GET',
+            data: {
+                ref: "<?php echo $ref?>"
+            }
+        }).done(function (result) {
+            console.log(result)
+
+        var context = canvas.getContext('2d');
+
+        var image = new Image();
+
+        image.src = "img/refs/<?php echo $_GET['ref']?>.png"
+
+        image.onload = function () {
+            var x = parseInt(document.getElementById('positionX').value);
+            var y = parseInt(document.getElementById('positionY').value);
+
+            var stretch = document.getElementById('stretch').value;
+
+            var srcWidth   = image.width;
+            var srcHeight  = image.height;
+            var destWidth  = image.width  * stretch / 100;
+            var destHeight = image.height * stretch / 100;
+
+            context.drawImage(image, 0, 0, srcWidth, srcHeight, x, y, destWidth, destHeight);
+
+            document.getElementById('positionY').value = y + destHeight + 16;
+        }
+
+        image.onerror = function () {
+            alert('Image file was not able to be loaded.');
+        }
+    }) 
+ }
+}
+
+function printFiles() {               
     var qty = <?=$_GET['qty'] ?>;
     var i = 0;
         while (i < qty) {
@@ -64,7 +107,6 @@ function printBarcodes() {
         i++;
         }
 }
-
 
 function onSendMessage() {
     var url              = document.getElementById('url').value;
@@ -145,8 +187,9 @@ function onSendMessage() {
 			<div class="wrapper">
 				<div id="canvasBlock">
 					<div id='canvasFrame'>
+                    
 						<canvas id='canvasPaper' height="125"> 
-                            <div> <?php echo $ref?> 123456 </div>
+                        
 						</canvas>
 					</div>
 				</div>
@@ -212,11 +255,25 @@ function onSendMessage() {
 <script type='text/javascript' src='js/StarWebPrintBuilder.js'></script>
 <script type='text/javascript' src='js/StarWebPrintTrader.js'></script>
 <script> 
-        $( document ).ready(function() {
-        onDrawImageFile(); 
+        $( document ).ready(function() {          
+    function Order() {               
+        var qty = <?=$_GET['qty'] ?>;
+        var i = 0;
+        while (i < qty) {
+
+        onDrawBarcodeFile(); 
         setTimeout(function() {
-        printBarcodes(); 
+        printFiles(); 
         }, 1000);
+
+        onDrawTextFile(); 
+        setTimeout(function() {
+        printFiles(); 
+        }, 1000);
+        i++;
+        }
+}
+Order(); 
         });
     </script> 
 </body>
